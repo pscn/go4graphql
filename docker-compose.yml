@@ -1,0 +1,7 @@
+version: '2.1' # 2.1 is important for the depends_on condition
+services:
+  api:
+    build: .
+    container_name: go4graphql
+    ports:
+      - 3000:3000
