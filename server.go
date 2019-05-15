@@ -10,7 +10,7 @@ import (
 	"github.com/pscn/go4graphql/graph"
 )
 
-const defaultPort = "8080"
+const defaultPort = "3000"
 
 func main() {
 	port := os.Getenv("PORT")
