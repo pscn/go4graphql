@@ -30,9 +30,7 @@ query {
     }
   }
 }
-```
 
-```graphql
 mutation {
   createVendor(input: {name: "FLV", code: "Flavorah"}) {
     name
