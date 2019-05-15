@@ -1,0 +1,53 @@
+type URL {
+  id: ID!
+  description: String!
+  url: String!
+}
+
+type Vendor {
+  id: ID!
+  name: String!
+  code: String!
+  urls: [URL]
+}
+
+input NewVendor {
+  name: String!
+  code: String!
+}
+input NewVendorURL {
+  vendorId: ID!
+  description: String!
+  url: String!
+}
+
+type Concentrate {
+  id: ID!
+  name: String!
+  vendor: Vendor!
+  gravity: Float
+  urls: [URL]
+}
+
+input NewConcentrate {
+  name: String!
+  vendorId: String!
+}
+
+input NewConcentrateURL {
+  concentrateId: ID!
+  description: String!
+  url: String!
+}
+
+type Query {
+  vendors: [Vendor!]!
+  concentrates: [Concentrate!]!
+}
+
+type Mutation {
+  createVendor(input: NewVendor!): Vendor!
+  addVendorURL(input: NewVendorURL!): URL!
+  createConcentrate(input: NewConcentrate!): Concentrate!
+  addConcentratURL(input: NewConcentrateURL!): URL!
+}

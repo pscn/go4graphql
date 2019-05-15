@@ -1,0 +1,19 @@
+# .gqlgen.yml example
+#
+# Refer to https://gqlgen.com/config/
+# for detailed .gqlgen.yml documentation.
+
+schema:
+  - schema.graphql
+exec:
+  filename: graph/generated.go
+model:
+  filename: model/generated.go
+resolver:
+  filename: api/resolver.go
+  type: Resolver
+models:
+  Vendor:
+    model: github.com/pscn/gqlgen-todos/model.Vendor
+  Concentrate:
+    model: github.com/pscn/gqlgen-todos/model.Concentrate
