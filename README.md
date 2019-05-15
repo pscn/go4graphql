@@ -8,7 +8,7 @@ Simple example using [gqlgen](https://github.com/99designs/gqlgen)
 docker-compose up
 ```
 
-Connect to [http://localhost:3000](http://localhost:3000)
+Then connect to [http://localhost:3000](http://localhost:3000).
 
 Data is kept in memory. Try:
 
