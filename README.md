@@ -38,3 +38,25 @@ mutation {
   }
 }
 ```
+
+## Develop
+
+Install gqlgen:
+
+```sh
+go get github.com/99designs/gqlgen
+```
+
+Fetch dependencies:
+
+```sh
+go get ./...
+```
+
+If you modified the schema run:
+
+```sh
+gqlgen
+```
+
+Modifiy `resolver.go`.
