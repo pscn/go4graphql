@@ -32,7 +32,7 @@ query {
 }
 
 mutation {
-  createVendor(input: {name: "FLV", code: "Flavorah"}) {
+  createVendor(input: {code: "FLV", name: "Flavorah"}) {
     name
     code
   }
