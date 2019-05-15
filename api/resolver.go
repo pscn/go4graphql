@@ -42,8 +42,9 @@ func NewResolver(verbose bool) *Resolver {
 	r.addVendor(v)
 
 	c := &model.Concentrate{
-		ID:   "CAP-Vanilla Custard",
-		Name: "Vanilla Custard",
+		ID:       "CAP-Vanilla Custard",
+		Name:     "Vanilla Custard",
+		VendorID: "CAP-Capella",
 	}
 	g := 1.012
 	c.Gravity = &g
@@ -212,6 +213,9 @@ func (r *queryResolver) Vendors(ctx context.Context) ([]model.Vendor, error) {
 	return result, nil
 }
 func (r *queryResolver) Concentrates(ctx context.Context) ([]model.Concentrate, error) {
+	if r.verbose {
+		log.Printf("Concentrates")
+	}
 	result := make([]model.Concentrate, len(r.vendors))
 	i := 0
 	for _, concentrate := range r.concentrates {
