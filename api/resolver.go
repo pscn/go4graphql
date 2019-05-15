@@ -73,7 +73,7 @@ func (r *Resolver) getURLs(ids []*string) ([]*model.URL, error) {
 	for idx, id := range ids {
 		result[idx], err = r.getURL(*id)
 		if err != nil {
-			return nil, nil
+			return nil, err
 		}
 	}
 	return result, nil
