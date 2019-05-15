@@ -11,7 +11,7 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/introspection"
-	"github.com/pscn/gqlgen-todos/model"
+	"github.com/pscn/go4graphql/model"
 	"github.com/vektah/gqlparser"
 	"github.com/vektah/gqlparser/ast"
 )
@@ -53,7 +53,7 @@ type ComplexityRoot struct {
 	}
 
 	Mutation struct {
-		AddConcentratURL  func(childComplexity int, input model.NewConcentrateURL) int
+		AddConcentrateURL func(childComplexity int, input model.NewConcentrateURL) int
 		AddVendorURL      func(childComplexity int, input model.NewVendorURL) int
 		CreateConcentrate func(childComplexity int, input model.NewConcentrate) int
 		CreateVendor      func(childComplexity int, input model.NewVendor) int
@@ -87,7 +87,7 @@ type MutationResolver interface {
 	CreateVendor(ctx context.Context, input model.NewVendor) (*model.Vendor, error)
 	AddVendorURL(ctx context.Context, input model.NewVendorURL) (*model.URL, error)
 	CreateConcentrate(ctx context.Context, input model.NewConcentrate) (*model.Concentrate, error)
-	AddConcentratURL(ctx context.Context, input model.NewConcentrateURL) (*model.URL, error)
+	AddConcentrateURL(ctx context.Context, input model.NewConcentrateURL) (*model.URL, error)
 }
 type QueryResolver interface {
 	Vendors(ctx context.Context) ([]model.Vendor, error)
@@ -147,17 +147,17 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Concentrate.Vendor(childComplexity), true
 
-	case "Mutation.addConcentratURL":
-		if e.complexity.Mutation.AddConcentratURL == nil {
+	case "Mutation.addConcentrateURL":
+		if e.complexity.Mutation.AddConcentrateURL == nil {
 			break
 		}
 
-		args, err := ec.field_Mutation_addConcentratURL_args(context.TODO(), rawArgs)
+		args, err := ec.field_Mutation_addConcentrateURL_args(context.TODO(), rawArgs)
 		if err != nil {
 			return 0, false
 		}
 
-		return e.complexity.Mutation.AddConcentratURL(childComplexity, args["input"].(model.NewConcentrateURL)), true
+		return e.complexity.Mutation.AddConcentrateURL(childComplexity, args["input"].(model.NewConcentrateURL)), true
 
 	case "Mutation.addVendorURL":
 		if e.complexity.Mutation.AddVendorURL == nil {
@@ -335,7 +335,7 @@ func (ec *executionContext) introspectType(name string) (*introspection.Type, er
 }
 
 var parsedSchema = gqlparser.MustLoadSchema(
-	&ast.Source{Name: "schema.graphql", Input: `type URL {
+	&ast.Source{Name: "schema/schema.graphql", Input: `type URL {
   id: ID!
   description: String!
   url: String!
@@ -352,6 +352,7 @@ input NewVendor {
   name: String!
   code: String!
 }
+
 input NewVendorURL {
   vendorId: ID!
   description: String!
@@ -386,7 +387,7 @@ type Mutation {
   createVendor(input: NewVendor!): Vendor!
   addVendorURL(input: NewVendorURL!): URL!
   createConcentrate(input: NewConcentrate!): Concentrate!
-  addConcentratURL(input: NewConcentrateURL!): URL!
+  addConcentrateURL(input: NewConcentrateURL!): URL!
 }
 `},
 )
@@ -395,12 +396,12 @@ type Mutation {
 
 // region    ***************************** args.gotpl *****************************
 
-func (ec *executionContext) field_Mutation_addConcentratURL_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_addConcentrateURL_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
 	var arg0 model.NewConcentrateURL
 	if tmp, ok := rawArgs["input"]; ok {
-		arg0, err = ec.unmarshalNNewConcentrateURL2githubᚗcomᚋpscnᚋgqlgenᚑtodosᚋmodelᚐNewConcentrateURL(ctx, tmp)
+		arg0, err = ec.unmarshalNNewConcentrateURL2githubᚗcomᚋpscnᚋgo4graphqlᚋmodelᚐNewConcentrateURL(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -414,7 +415,7 @@ func (ec *executionContext) field_Mutation_addVendorURL_args(ctx context.Context
 	args := map[string]interface{}{}
 	var arg0 model.NewVendorURL
 	if tmp, ok := rawArgs["input"]; ok {
-		arg0, err = ec.unmarshalNNewVendorURL2githubᚗcomᚋpscnᚋgqlgenᚑtodosᚋmodelᚐNewVendorURL(ctx, tmp)
+		arg0, err = ec.unmarshalNNewVendorURL2githubᚗcomᚋpscnᚋgo4graphqlᚋmodelᚐNewVendorURL(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -428,7 +429,7 @@ func (ec *executionContext) field_Mutation_createConcentrate_args(ctx context.Co
 	args := map[string]interface{}{}
 	var arg0 model.NewConcentrate
 	if tmp, ok := rawArgs["input"]; ok {
-		arg0, err = ec.unmarshalNNewConcentrate2githubᚗcomᚋpscnᚋgqlgenᚑtodosᚋmodelᚐNewConcentrate(ctx, tmp)
+		arg0, err = ec.unmarshalNNewConcentrate2githubᚗcomᚋpscnᚋgo4graphqlᚋmodelᚐNewConcentrate(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -442,7 +443,7 @@ func (ec *executionContext) field_Mutation_createVendor_args(ctx context.Context
 	args := map[string]interface{}{}
 	var arg0 model.NewVendor
 	if tmp, ok := rawArgs["input"]; ok {
-		arg0, err = ec.unmarshalNNewVendor2githubᚗcomᚋpscnᚋgqlgenᚑtodosᚋmodelᚐNewVendor(ctx, tmp)
+		arg0, err = ec.unmarshalNNewVendor2githubᚗcomᚋpscnᚋgo4graphqlᚋmodelᚐNewVendor(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -575,7 +576,7 @@ func (ec *executionContext) _Concentrate_vendor(ctx context.Context, field graph
 	res := resTmp.(*model.Vendor)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalNVendor2ᚖgithubᚗcomᚋpscnᚋgqlgenᚑtodosᚋmodelᚐVendor(ctx, field.Selections, res)
+	return ec.marshalNVendor2ᚖgithubᚗcomᚋpscnᚋgo4graphqlᚋmodelᚐVendor(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Concentrate_gravity(ctx context.Context, field graphql.CollectedField, obj *model.Concentrate) graphql.Marshaler {
@@ -623,7 +624,7 @@ func (ec *executionContext) _Concentrate_urls(ctx context.Context, field graphql
 	res := resTmp.([]*model.URL)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalOURL2ᚕᚖgithubᚗcomᚋpscnᚋgqlgenᚑtodosᚋmodelᚐURL(ctx, field.Selections, res)
+	return ec.marshalOURL2ᚕᚖgithubᚗcomᚋpscnᚋgo4graphqlᚋmodelᚐURL(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Mutation_createVendor(ctx context.Context, field graphql.CollectedField) graphql.Marshaler {
@@ -657,7 +658,7 @@ func (ec *executionContext) _Mutation_createVendor(ctx context.Context, field gr
 	res := resTmp.(*model.Vendor)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalNVendor2ᚖgithubᚗcomᚋpscnᚋgqlgenᚑtodosᚋmodelᚐVendor(ctx, field.Selections, res)
+	return ec.marshalNVendor2ᚖgithubᚗcomᚋpscnᚋgo4graphqlᚋmodelᚐVendor(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Mutation_addVendorURL(ctx context.Context, field graphql.CollectedField) graphql.Marshaler {
@@ -691,7 +692,7 @@ func (ec *executionContext) _Mutation_addVendorURL(ctx context.Context, field gr
 	res := resTmp.(*model.URL)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalNURL2ᚖgithubᚗcomᚋpscnᚋgqlgenᚑtodosᚋmodelᚐURL(ctx, field.Selections, res)
+	return ec.marshalNURL2ᚖgithubᚗcomᚋpscnᚋgo4graphqlᚋmodelᚐURL(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Mutation_createConcentrate(ctx context.Context, field graphql.CollectedField) graphql.Marshaler {
@@ -725,10 +726,10 @@ func (ec *executionContext) _Mutation_createConcentrate(ctx context.Context, fie
 	res := resTmp.(*model.Concentrate)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalNConcentrate2ᚖgithubᚗcomᚋpscnᚋgqlgenᚑtodosᚋmodelᚐConcentrate(ctx, field.Selections, res)
+	return ec.marshalNConcentrate2ᚖgithubᚗcomᚋpscnᚋgo4graphqlᚋmodelᚐConcentrate(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Mutation_addConcentratURL(ctx context.Context, field graphql.CollectedField) graphql.Marshaler {
+func (ec *executionContext) _Mutation_addConcentrateURL(ctx context.Context, field graphql.CollectedField) graphql.Marshaler {
 	ctx = ec.Tracer.StartFieldExecution(ctx, field)
 	defer func() { ec.Tracer.EndFieldExecution(ctx) }()
 	rctx := &graphql.ResolverContext{
@@ -739,7 +740,7 @@ func (ec *executionContext) _Mutation_addConcentratURL(ctx context.Context, fiel
 	}
 	ctx = graphql.WithResolverContext(ctx, rctx)
 	rawArgs := field.ArgumentMap(ec.Variables)
-	args, err := ec.field_Mutation_addConcentratURL_args(ctx, rawArgs)
+	args, err := ec.field_Mutation_addConcentrateURL_args(ctx, rawArgs)
 	if err != nil {
 		ec.Error(ctx, err)
 		return graphql.Null
@@ -748,7 +749,7 @@ func (ec *executionContext) _Mutation_addConcentratURL(ctx context.Context, fiel
 	ctx = ec.Tracer.StartFieldResolverExecution(ctx, rctx)
 	resTmp := ec.FieldMiddleware(ctx, nil, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().AddConcentratURL(rctx, args["input"].(model.NewConcentrateURL))
+		return ec.resolvers.Mutation().AddConcentrateURL(rctx, args["input"].(model.NewConcentrateURL))
 	})
 	if resTmp == nil {
 		if !ec.HasError(rctx) {
@@ -759,7 +760,7 @@ func (ec *executionContext) _Mutation_addConcentratURL(ctx context.Context, fiel
 	res := resTmp.(*model.URL)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalNURL2ᚖgithubᚗcomᚋpscnᚋgqlgenᚑtodosᚋmodelᚐURL(ctx, field.Selections, res)
+	return ec.marshalNURL2ᚖgithubᚗcomᚋpscnᚋgo4graphqlᚋmodelᚐURL(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query_vendors(ctx context.Context, field graphql.CollectedField) graphql.Marshaler {
@@ -786,7 +787,7 @@ func (ec *executionContext) _Query_vendors(ctx context.Context, field graphql.Co
 	res := resTmp.([]model.Vendor)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalNVendor2ᚕgithubᚗcomᚋpscnᚋgqlgenᚑtodosᚋmodelᚐVendor(ctx, field.Selections, res)
+	return ec.marshalNVendor2ᚕgithubᚗcomᚋpscnᚋgo4graphqlᚋmodelᚐVendor(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query_concentrates(ctx context.Context, field graphql.CollectedField) graphql.Marshaler {
@@ -813,7 +814,7 @@ func (ec *executionContext) _Query_concentrates(ctx context.Context, field graph
 	res := resTmp.([]model.Concentrate)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalNConcentrate2ᚕgithubᚗcomᚋpscnᚋgqlgenᚑtodosᚋmodelᚐConcentrate(ctx, field.Selections, res)
+	return ec.marshalNConcentrate2ᚕgithubᚗcomᚋpscnᚋgo4graphqlᚋmodelᚐConcentrate(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query___type(ctx context.Context, field graphql.CollectedField) graphql.Marshaler {
@@ -1054,7 +1055,7 @@ func (ec *executionContext) _Vendor_urls(ctx context.Context, field graphql.Coll
 	res := resTmp.([]*model.URL)
 	rctx.Result = res
 	ctx = ec.Tracer.StartFieldChildExecution(ctx)
-	return ec.marshalOURL2ᚕᚖgithubᚗcomᚋpscnᚋgqlgenᚑtodosᚋmodelᚐURL(ctx, field.Selections, res)
+	return ec.marshalOURL2ᚕᚖgithubᚗcomᚋpscnᚋgo4graphqlᚋmodelᚐURL(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) ___Directive_name(ctx context.Context, field graphql.CollectedField, obj *introspection.Directive) graphql.Marshaler {
@@ -2093,8 +2094,8 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			if out.Values[i] == graphql.Null {
 				invalid = true
 			}
-		case "addConcentratURL":
-			out.Values[i] = ec._Mutation_addConcentratURL(ctx, field)
+		case "addConcentrateURL":
+			out.Values[i] = ec._Mutation_addConcentrateURL(ctx, field)
 			if out.Values[i] == graphql.Null {
 				invalid = true
 			}
@@ -2511,11 +2512,11 @@ func (ec *executionContext) marshalNBoolean2bool(ctx context.Context, sel ast.Se
 	return res
 }
 
-func (ec *executionContext) marshalNConcentrate2githubᚗcomᚋpscnᚋgqlgenᚑtodosᚋmodelᚐConcentrate(ctx context.Context, sel ast.SelectionSet, v model.Concentrate) graphql.Marshaler {
+func (ec *executionContext) marshalNConcentrate2githubᚗcomᚋpscnᚋgo4graphqlᚋmodelᚐConcentrate(ctx context.Context, sel ast.SelectionSet, v model.Concentrate) graphql.Marshaler {
 	return ec._Concentrate(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNConcentrate2ᚕgithubᚗcomᚋpscnᚋgqlgenᚑtodosᚋmodelᚐConcentrate(ctx context.Context, sel ast.SelectionSet, v []model.Concentrate) graphql.Marshaler {
+func (ec *executionContext) marshalNConcentrate2ᚕgithubᚗcomᚋpscnᚋgo4graphqlᚋmodelᚐConcentrate(ctx context.Context, sel ast.SelectionSet, v []model.Concentrate) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -2539,7 +2540,7 @@ func (ec *executionContext) marshalNConcentrate2ᚕgithubᚗcomᚋpscnᚋgqlgen�
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNConcentrate2githubᚗcomᚋpscnᚋgqlgenᚑtodosᚋmodelᚐConcentrate(ctx, sel, v[i])
+			ret[i] = ec.marshalNConcentrate2githubᚗcomᚋpscnᚋgo4graphqlᚋmodelᚐConcentrate(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -2552,7 +2553,7 @@ func (ec *executionContext) marshalNConcentrate2ᚕgithubᚗcomᚋpscnᚋgqlgen�
 	return ret
 }
 
-func (ec *executionContext) marshalNConcentrate2ᚖgithubᚗcomᚋpscnᚋgqlgenᚑtodosᚋmodelᚐConcentrate(ctx context.Context, sel ast.SelectionSet, v *model.Concentrate) graphql.Marshaler {
+func (ec *executionContext) marshalNConcentrate2ᚖgithubᚗcomᚋpscnᚋgo4graphqlᚋmodelᚐConcentrate(ctx context.Context, sel ast.SelectionSet, v *model.Concentrate) graphql.Marshaler {
 	if v == nil {
 		if !ec.HasError(graphql.GetResolverContext(ctx)) {
 			ec.Errorf(ctx, "must not be null")
@@ -2576,19 +2577,19 @@ func (ec *executionContext) marshalNID2string(ctx context.Context, sel ast.Selec
 	return res
 }
 
-func (ec *executionContext) unmarshalNNewConcentrate2githubᚗcomᚋpscnᚋgqlgenᚑtodosᚋmodelᚐNewConcentrate(ctx context.Context, v interface{}) (model.NewConcentrate, error) {
+func (ec *executionContext) unmarshalNNewConcentrate2githubᚗcomᚋpscnᚋgo4graphqlᚋmodelᚐNewConcentrate(ctx context.Context, v interface{}) (model.NewConcentrate, error) {
 	return ec.unmarshalInputNewConcentrate(ctx, v)
 }
 
-func (ec *executionContext) unmarshalNNewConcentrateURL2githubᚗcomᚋpscnᚋgqlgenᚑtodosᚋmodelᚐNewConcentrateURL(ctx context.Context, v interface{}) (model.NewConcentrateURL, error) {
+func (ec *executionContext) unmarshalNNewConcentrateURL2githubᚗcomᚋpscnᚋgo4graphqlᚋmodelᚐNewConcentrateURL(ctx context.Context, v interface{}) (model.NewConcentrateURL, error) {
 	return ec.unmarshalInputNewConcentrateURL(ctx, v)
 }
 
-func (ec *executionContext) unmarshalNNewVendor2githubᚗcomᚋpscnᚋgqlgenᚑtodosᚋmodelᚐNewVendor(ctx context.Context, v interface{}) (model.NewVendor, error) {
+func (ec *executionContext) unmarshalNNewVendor2githubᚗcomᚋpscnᚋgo4graphqlᚋmodelᚐNewVendor(ctx context.Context, v interface{}) (model.NewVendor, error) {
 	return ec.unmarshalInputNewVendor(ctx, v)
 }
 
-func (ec *executionContext) unmarshalNNewVendorURL2githubᚗcomᚋpscnᚋgqlgenᚑtodosᚋmodelᚐNewVendorURL(ctx context.Context, v interface{}) (model.NewVendorURL, error) {
+func (ec *executionContext) unmarshalNNewVendorURL2githubᚗcomᚋpscnᚋgo4graphqlᚋmodelᚐNewVendorURL(ctx context.Context, v interface{}) (model.NewVendorURL, error) {
 	return ec.unmarshalInputNewVendorURL(ctx, v)
 }
 
@@ -2606,11 +2607,11 @@ func (ec *executionContext) marshalNString2string(ctx context.Context, sel ast.S
 	return res
 }
 
-func (ec *executionContext) marshalNURL2githubᚗcomᚋpscnᚋgqlgenᚑtodosᚋmodelᚐURL(ctx context.Context, sel ast.SelectionSet, v model.URL) graphql.Marshaler {
+func (ec *executionContext) marshalNURL2githubᚗcomᚋpscnᚋgo4graphqlᚋmodelᚐURL(ctx context.Context, sel ast.SelectionSet, v model.URL) graphql.Marshaler {
 	return ec._URL(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNURL2ᚖgithubᚗcomᚋpscnᚋgqlgenᚑtodosᚋmodelᚐURL(ctx context.Context, sel ast.SelectionSet, v *model.URL) graphql.Marshaler {
+func (ec *executionContext) marshalNURL2ᚖgithubᚗcomᚋpscnᚋgo4graphqlᚋmodelᚐURL(ctx context.Context, sel ast.SelectionSet, v *model.URL) graphql.Marshaler {
 	if v == nil {
 		if !ec.HasError(graphql.GetResolverContext(ctx)) {
 			ec.Errorf(ctx, "must not be null")
@@ -2620,11 +2621,11 @@ func (ec *executionContext) marshalNURL2ᚖgithubᚗcomᚋpscnᚋgqlgenᚑtodos�
 	return ec._URL(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNVendor2githubᚗcomᚋpscnᚋgqlgenᚑtodosᚋmodelᚐVendor(ctx context.Context, sel ast.SelectionSet, v model.Vendor) graphql.Marshaler {
+func (ec *executionContext) marshalNVendor2githubᚗcomᚋpscnᚋgo4graphqlᚋmodelᚐVendor(ctx context.Context, sel ast.SelectionSet, v model.Vendor) graphql.Marshaler {
 	return ec._Vendor(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNVendor2ᚕgithubᚗcomᚋpscnᚋgqlgenᚑtodosᚋmodelᚐVendor(ctx context.Context, sel ast.SelectionSet, v []model.Vendor) graphql.Marshaler {
+func (ec *executionContext) marshalNVendor2ᚕgithubᚗcomᚋpscnᚋgo4graphqlᚋmodelᚐVendor(ctx context.Context, sel ast.SelectionSet, v []model.Vendor) graphql.Marshaler {
 	ret := make(graphql.Array, len(v))
 	var wg sync.WaitGroup
 	isLen1 := len(v) == 1
@@ -2648,7 +2649,7 @@ func (ec *executionContext) marshalNVendor2ᚕgithubᚗcomᚋpscnᚋgqlgenᚑtod
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNVendor2githubᚗcomᚋpscnᚋgqlgenᚑtodosᚋmodelᚐVendor(ctx, sel, v[i])
+			ret[i] = ec.marshalNVendor2githubᚗcomᚋpscnᚋgo4graphqlᚋmodelᚐVendor(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -2661,7 +2662,7 @@ func (ec *executionContext) marshalNVendor2ᚕgithubᚗcomᚋpscnᚋgqlgenᚑtod
 	return ret
 }
 
-func (ec *executionContext) marshalNVendor2ᚖgithubᚗcomᚋpscnᚋgqlgenᚑtodosᚋmodelᚐVendor(ctx context.Context, sel ast.SelectionSet, v *model.Vendor) graphql.Marshaler {
+func (ec *executionContext) marshalNVendor2ᚖgithubᚗcomᚋpscnᚋgo4graphqlᚋmodelᚐVendor(ctx context.Context, sel ast.SelectionSet, v *model.Vendor) graphql.Marshaler {
 	if v == nil {
 		if !ec.HasError(graphql.GetResolverContext(ctx)) {
 			ec.Errorf(ctx, "must not be null")
@@ -2966,11 +2967,11 @@ func (ec *executionContext) marshalOString2ᚖstring(ctx context.Context, sel as
 	return ec.marshalOString2string(ctx, sel, *v)
 }
 
-func (ec *executionContext) marshalOURL2githubᚗcomᚋpscnᚋgqlgenᚑtodosᚋmodelᚐURL(ctx context.Context, sel ast.SelectionSet, v model.URL) graphql.Marshaler {
+func (ec *executionContext) marshalOURL2githubᚗcomᚋpscnᚋgo4graphqlᚋmodelᚐURL(ctx context.Context, sel ast.SelectionSet, v model.URL) graphql.Marshaler {
 	return ec._URL(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalOURL2ᚕᚖgithubᚗcomᚋpscnᚋgqlgenᚑtodosᚋmodelᚐURL(ctx context.Context, sel ast.SelectionSet, v []*model.URL) graphql.Marshaler {
+func (ec *executionContext) marshalOURL2ᚕᚖgithubᚗcomᚋpscnᚋgo4graphqlᚋmodelᚐURL(ctx context.Context, sel ast.SelectionSet, v []*model.URL) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -2997,7 +2998,7 @@ func (ec *executionContext) marshalOURL2ᚕᚖgithubᚗcomᚋpscnᚋgqlgenᚑtod
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOURL2ᚖgithubᚗcomᚋpscnᚋgqlgenᚑtodosᚋmodelᚐURL(ctx, sel, v[i])
+			ret[i] = ec.marshalOURL2ᚖgithubᚗcomᚋpscnᚋgo4graphqlᚋmodelᚐURL(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -3010,7 +3011,7 @@ func (ec *executionContext) marshalOURL2ᚕᚖgithubᚗcomᚋpscnᚋgqlgenᚑtod
 	return ret
 }
 
-func (ec *executionContext) marshalOURL2ᚖgithubᚗcomᚋpscnᚋgqlgenᚑtodosᚋmodelᚐURL(ctx context.Context, sel ast.SelectionSet, v *model.URL) graphql.Marshaler {
+func (ec *executionContext) marshalOURL2ᚖgithubᚗcomᚋpscnᚋgo4graphqlᚋmodelᚐURL(ctx context.Context, sel ast.SelectionSet, v *model.URL) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
