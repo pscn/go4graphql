@@ -15,6 +15,7 @@ input NewVendor {
   name: String!
   code: String!
 }
+
 input NewVendorURL {
   vendorId: ID!
   description: String!
@@ -49,5 +50,5 @@ type Mutation {
   createVendor(input: NewVendor!): Vendor!
   addVendorURL(input: NewVendorURL!): URL!
   createConcentrate(input: NewConcentrate!): Concentrate!
-  addConcentratURL(input: NewConcentrateURL!): URL!
+  addConcentrateURL(input: NewConcentrateURL!): URL!
 }
