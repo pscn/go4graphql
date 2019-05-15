@@ -19,12 +19,36 @@ type Resolver struct {
 }
 
 func NewResolver(verbose bool) *Resolver {
-	return &Resolver{
+	r := &Resolver{
 		verbose:      verbose,
 		urls:         make(map[string]*model.URL, 10),
 		vendors:      make(map[string]*model.Vendor, 10),
 		concentrates: make(map[string]*model.Concentrate, 10),
 	}
+	u := &model.URL{
+		ID:          "http://www.capella.com",
+		Description: "Homepage",
+		URL:         "http://www.capella.com",
+	}
+	r.addURL(u)
+
+	v := &model.Vendor{
+		ID:   "CAP-Capella",
+		Name: "Capella",
+		Code: "CAP",
+	}
+	v.URLIDs = append(v.URLIDs, &u.ID)
+	r.addVendor(v)
+
+	c := &model.Concentrate{
+		ID:   "CAP-Vanilla Custard",
+		Name: "Vanilla Custard",
+	}
+	g := 1.012
+	c.Gravity = &g
+	c.URLIDs = append(v.URLIDs, &u.ID)
+	r.addConcentrate(c)
+	return r
 }
 
 func (r *Resolver) addURL(url *model.URL) error {
