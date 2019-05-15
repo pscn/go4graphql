@@ -5,29 +5,36 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/pscn/gqlgen-todos/graph"
-	"github.com/pscn/gqlgen-todos/model"
+	"github.com/pscn/go4graphql/graph"
+	"github.com/pscn/go4graphql/model"
 )
 
 // THIS CODE IS A STARTING POINT ONLY. IT WILL NOT BE UPDATED WITH SCHEMA CHANGES.
 
 type Resolver struct {
-	urls         map[string]model.URL
-	vendors      map[string]model.Vendor
-	concentrates map[string]model.Concentrate
+	verbose      bool
+	urls         map[string]*model.URL
+	vendors      map[string]*model.Vendor
+	concentrates map[string]*model.Concentrate
+}
+
+func NewResolver(verbose bool) *Resolver {
+	return &Resolver{
+		verbose:      verbose,
+		urls:         make(map[string]*model.URL, 10),
+		vendors:      make(map[string]*model.Vendor, 10),
+		concentrates: make(map[string]*model.Concentrate, 10),
+	}
 }
 
 func (r *Resolver) addURL(url *model.URL) error {
-	if r.urls == nil {
-		r.urls = make(map[string]model.URL, 1)
-	}
-	r.urls[url.ID] = *url
+	r.urls[url.ID] = url
 	return nil
 }
 
 func (r *Resolver) getURL(id string) *model.URL {
 	if result, ok := r.urls[id]; ok {
-		return &result
+		return result
 	}
 	return nil
 }
@@ -41,31 +48,25 @@ func (r *Resolver) getURLs(ids []*string) []*model.URL {
 }
 
 func (r *Resolver) addVendor(vendor *model.Vendor) error {
-	if r.vendors == nil {
-		r.vendors = make(map[string]model.Vendor, 1)
-	}
-	r.vendors[vendor.ID] = *vendor
+	r.vendors[vendor.ID] = vendor
 	return nil
 }
 
 func (r *Resolver) getVendor(id string) *model.Vendor {
 	if result, ok := r.vendors[id]; ok {
-		return &result
+		return result
 	}
 	return nil
 }
 
 func (r *Resolver) addConcentrate(concentrate *model.Concentrate) error {
-	if r.concentrates == nil {
-		r.concentrates = make(map[string]model.Concentrate, 1)
-	}
-	r.concentrates[concentrate.ID] = *concentrate
+	r.concentrates[concentrate.ID] = concentrate
 	return nil
 }
 
 func (r *Resolver) getConcentrate(id string) *model.Concentrate {
 	if result, ok := r.concentrates[id]; ok {
-		return &result
+		return result
 	}
 	return nil
 }
@@ -86,15 +87,24 @@ func (r *Resolver) Vendor() graph.VendorResolver {
 type concentrateResolver struct{ *Resolver }
 
 func (r *concentrateResolver) Vendor(ctx context.Context, obj *model.Concentrate) (*model.Vendor, error) {
+	if r.verbose {
+		log.Printf("Vendor: %+v", obj)
+	}
 	return r.getVendor(obj.VendorID), nil
 }
 func (r *concentrateResolver) Urls(ctx context.Context, obj *model.Concentrate) ([]*model.URL, error) {
+	if r.verbose {
+		log.Printf("Urls: %+v", obj)
+	}
 	return r.getURLs(obj.URLIDs), nil
 }
 
 type mutationResolver struct{ *Resolver }
 
 func (r *mutationResolver) CreateVendor(ctx context.Context, input model.NewVendor) (*model.Vendor, error) {
+	if r.verbose {
+		log.Printf("CreateVendor: %+v", input)
+	}
 	id := fmt.Sprintf("%s-%s", input.Code, input.Name)
 	vendor := &model.Vendor{
 		ID:   id,
@@ -105,6 +115,9 @@ func (r *mutationResolver) CreateVendor(ctx context.Context, input model.NewVend
 	return vendor, nil
 }
 func (r *mutationResolver) AddVendorURL(ctx context.Context, input model.NewVendorURL) (*model.URL, error) {
+	if r.verbose {
+		log.Printf("AddVendorURL: %+v", input)
+	}
 	vendor := r.getVendor(input.VendorID)
 	if vendor == nil {
 		return nil, fmt.Errorf("vendor not found")
@@ -120,6 +133,9 @@ func (r *mutationResolver) AddVendorURL(ctx context.Context, input model.NewVend
 	return url, nil
 }
 func (r *mutationResolver) CreateConcentrate(ctx context.Context, input model.NewConcentrate) (*model.Concentrate, error) {
+	if r.verbose {
+		log.Printf("CreateConcentrate: %+v", input)
+	}
 	vendor := r.getVendor(input.VendorID)
 	if vendor == nil {
 		return nil, fmt.Errorf("vendor not found")
@@ -133,7 +149,10 @@ func (r *mutationResolver) CreateConcentrate(ctx context.Context, input model.Ne
 	r.addConcentrate(concentrate)
 	return concentrate, nil
 }
-func (r *mutationResolver) AddConcentratURL(ctx context.Context, input model.NewConcentrateURL) (*model.URL, error) {
+func (r *mutationResolver) AddConcentrateURL(ctx context.Context, input model.NewConcentrateURL) (*model.URL, error) {
+	if r.verbose {
+		log.Printf("AddConcentrateURL: %+v", input)
+	}
 	concentrate := r.getConcentrate(input.ConcentrateID)
 	if concentrate == nil {
 		return nil, fmt.Errorf("concentrate not found")
@@ -152,11 +171,13 @@ func (r *mutationResolver) AddConcentratURL(ctx context.Context, input model.New
 type queryResolver struct{ *Resolver }
 
 func (r *queryResolver) Vendors(ctx context.Context) ([]model.Vendor, error) {
-	log.Printf("%+v", r.vendors)
+	if r.verbose {
+		log.Printf("Vendors")
+	}
 	result := make([]model.Vendor, len(r.vendors))
 	i := 0
 	for _, vendor := range r.vendors {
-		result[i] = vendor
+		result[i] = *vendor
 		i++
 	}
 	return result, nil
@@ -165,7 +186,7 @@ func (r *queryResolver) Concentrates(ctx context.Context) ([]model.Concentrate, 
 	result := make([]model.Concentrate, len(r.vendors))
 	i := 0
 	for _, concentrate := range r.concentrates {
-		result[i] = concentrate
+		result[i] = *concentrate
 		i++
 	}
 	return result, nil
@@ -174,6 +195,9 @@ func (r *queryResolver) Concentrates(ctx context.Context) ([]model.Concentrate, 
 type vendorResolver struct{ *Resolver }
 
 func (r *vendorResolver) Urls(ctx context.Context, obj *model.Vendor) ([]*model.URL, error) {
+	if r.verbose {
+		log.Printf("Urls: %+v", obj)
+	}
 	vendor := r.getVendor(obj.ID)
 	if vendor == nil {
 		return nil, fmt.Errorf("vendor not found")
