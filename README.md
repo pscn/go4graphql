@@ -21,6 +21,15 @@ query {
     }
   }
 }
+
+query {
+  concentrates {
+    name
+    vendor {
+      code
+    }
+  }
+}
 ```
 
 ```graphql
