@@ -1,0 +1,5 @@
+{
+  "version": 2,
+  "name": "gusta-go-graphql-poc",
+  "builds": [{"src": "now/now.go", "use": "@now/go"}]
+}

@@ -12,6 +12,14 @@ import (
 
 const defaultPort = "3000"
 
+func Handler(w http.ResponseWriter, r *http.Request) {
+	h := handler.GraphQL(
+		graph.NewExecutableSchema(
+			graph.Config{Resolvers: api.NewResolver(true)}),
+	)
+	h(w, r)
+}
+
 func main() {
 	port := os.Getenv("PORT")
 	if port == "" {
