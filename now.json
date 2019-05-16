@@ -1,5 +1,12 @@
 {
   "version": 2,
   "name": "gusta-go-graphql-poc",
-  "builds": [{"src": "now/now.go", "use": "@now/go"}]
+  "builds": [
+    {"src": "now/query.go", "use": "@now/go"},
+    {"src": "now/playground.go", "use": "@now/go"}
+  ],
+  "routes": [
+    {"src": "/", "dest": "now/playground.go"},
+    {"src": "/query", "dest": "now/query.go"}
+  ]
 }
